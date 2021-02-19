@@ -33,8 +33,9 @@ public class CacheKey implements Cloneable, Serializable {
   private static final long serialVersionUID = 1146682552656046210L;
 
   public static final CacheKey NULL_CACHE_KEY = new NullCacheKey();
-
+  // 常数因子 31 33 37 39 41
   private static final int DEFAULT_MULTIPLYER = 37;
+  // 一个不大不小的质数
   private static final int DEFAULT_HASHCODE = 17;
 
   private int multiplier;
@@ -79,9 +80,12 @@ public class CacheKey implements Cloneable, Serializable {
     int baseHashCode = object == null ? 1 : object.hashCode();
 
     count++;
+    // hash 数值和
     checksum += baseHashCode;
     baseHashCode *= count;
-
+    // 常数因子 31 33 37 39 41
+    // hashcode = 因子 * old hashcode + object hashcode * count
+    //TODO 为啥要*count？
     hashcode = multiplier * hashcode + baseHashCode;
 
     //同时将对象加入列表，这样万一两个CacheKey的hash码碰巧一样，再根据对象严格equals来区分

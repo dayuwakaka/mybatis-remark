@@ -34,6 +34,11 @@ import org.apache.ibatis.cache.CacheException;
  * @author Eduardo Macarron
  *
  */
+
+/**
+ * 修饰模式，对Cache增加阻塞的特性
+ * 是对缓存增加线程阻塞的修饰特性
+ */
 public class BlockingCache implements Cache {
 
   private long timeout;
@@ -68,6 +73,8 @@ public class BlockingCache implements Cache {
   public Object getObject(Object key) {
     acquireLock(key);
     Object value = delegate.getObject(key);
+    // 若没有从缓存取回数据，那么这个线程则继续持有锁
+    // 然后从数据库取出数据后，putObject()的时候释放锁
     if (value != null) {
       releaseLock(key);
     }        
@@ -113,6 +120,7 @@ public class BlockingCache implements Cache {
   
   private void releaseLock(Object key) {
     ReentrantLock lock = locks.get(key);
+    // 如果被当前线程锁定，那么解锁
     if (lock.isHeldByCurrentThread()) {
       lock.unlock();
     }

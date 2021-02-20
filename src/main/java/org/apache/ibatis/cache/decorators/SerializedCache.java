@@ -105,7 +105,10 @@ public class SerializedCache implements Cache {
       ObjectOutputStream oos = new ObjectOutputStream(bos);
       oos.writeObject(value);
       oos.flush();
+      //为何不在finally里关闭呢？后续版本修复了这个错误写法
       oos.close();
+      //TODO 关闭了流，再返回？关闭的流，数据都在buf中？那么关闭的意义是什么？
+      //TODO 需要学习了解OutputStream的关闭思路
       return bos.toByteArray();
     } catch (Exception e) {
       throw new CacheException("Error serializing object.  Cause: " + e, e);

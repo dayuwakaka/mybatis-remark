@@ -29,6 +29,7 @@ import org.apache.ibatis.cache.Cache;
 /*
  * FIFO缓存
  * 这个类就是维护一个FIFO链表，其他都委托给所包装的cache去做。典型的装饰模式
+ * 默认维护一个1024个元素的FIFO的缓存策略
  */
 public class FifoCache implements Cache {
 

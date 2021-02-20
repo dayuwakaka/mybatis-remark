@@ -27,6 +27,9 @@ import org.apache.ibatis.logging.LogFactory;
 /**
  * 日志缓存
  * 添加功能：取缓存时打印命中率
+ * 主要功能是统计访问缓存的次数 request,每次getObject的时候命中次数 hit
+ * 然后打印出 hit/request 的命中率
+ * debug模式的时候，每次命中缓存的时候，可以输出命中率
  *
  */
 public class LoggingCache implements Cache {

@@ -54,9 +54,11 @@ public class GenericTokenParser {
           offset = start + openToken.length();
         } else {
           int end = text.indexOf(closeToken, start);
+          // 没有结尾，那么将offset开始到最后所有字符串截取
           if (end == -1) {
             builder.append(src, offset, src.length - offset);
             offset = src.length;
+            // 有open,close，抽取中间变量值
           } else {
             builder.append(src, offset, start - offset);
             offset = start + openToken.length();
@@ -68,6 +70,7 @@ public class GenericTokenParser {
         }
         start = text.indexOf(openToken, offset);
       }
+      // 处理余下字符
       if (offset < src.length) {
         builder.append(src, offset, src.length - offset);
       }
